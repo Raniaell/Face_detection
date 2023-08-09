@@ -12,16 +12,19 @@ def detect_faces(rectangle_color, min_neighbors, scale_factor):
         # Convert the frames to grayscale
       gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         # Detect the faces using the face cascade classifier
-      faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
+      faces = face_cascade.detectMultiScale(gray, scaleFactor=scale_factor, minNeighbors=min_neighbors)
+      
         # Draw rectangles around the detected faces
       for (x, y, w, h) in faces:
-          cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+          rectangle_color = (0, 128, 255)
+          cv2.rectangle(frame, (x, y), (x + w, y + h), thickness=2, color = rectangle_color)
         # Display the frames
       cv2.imshow('Face Detection using Viola-Jones Algorithm', frame)
-        # Exit the loop when 'q' is pressed
+        
       if cv2.waitKey(1) & 0xFF == ord('s'):
         cv2.imwrite('Save your Face image:', frame)
         print("image is saved as 'detected_face.jpg'")
+      # Exit the loop when 'q' is pressed
       if cv2.waitKey(1) & 0xFF == ord('q'):
         break
           
