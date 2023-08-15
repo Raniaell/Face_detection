@@ -16,13 +16,14 @@ def detect_faces(rectangle_color, min_neighbors, scale_factor):
       
         # Draw rectangles around the detected faces
       for (x, y, w, h) in faces:
-          cv2.rectangle(frame, (x, y), (x + w, y + h), thickness=2, color = rectangle_color)
+        cv2.rectangle(frame, (x, y), (x + w, y + h), rectangle_color, 2)
         # Display the frames
       cv2.imshow('Face Detection using Viola-Jones Algorithm', frame)
         
       if cv2.waitKey(1) & 0xFF == ord('s'):
         cv2.imwrite('Save your Face image:', frame)
-        print("image is saved as 'detected_face.jpg'")
+        st.success("Image saved successfully as 'detected_face.jpg")
+
       # Exit the loop when 'q' is pressed
       if cv2.waitKey(1) & 0xFF == ord('q'):
         break
@@ -35,16 +36,14 @@ def app():
     st.title("Face Detection using Viola-Jones Algorithm")
     st.write('This algorithm will allow you to detect faces from your webcam by drawing a rectangle !')
     st.write("Press the button below to start detecting faces from your webcam")
-    color_code=st.color_picker("Choose a color for your rectangle")
-    red = int(color_code[1:3], 16)
-    green = int(color_code[3:5], 16)
-    blue = int(color_code[5:7], 16)
-    rectangle_color = (blue, green, red)
+    rectangle_color=st.color_picker("Choose a color for your rectangle", "#FF0000")
+    rectangle_color = tuple(int(rectangle_color.lstrip("#")[i:i+2], 16) for i in (0, 2, 4))
     min_neighbors=st.slider('choose a minNeighbor parameter:', 1, 10, 5 )
     scale_factor = st.slider('Choose scaleFactor parameter:', 1.01, 1.5, 1.1)
     # Add a button to start detecting faces
     if st.button("Detect Faces"):
       detect_faces(rectangle_color, min_neighbors, scale_factor)
+      
 
 if __name__ == "__main__":
   app()
