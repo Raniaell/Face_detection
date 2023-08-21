@@ -17,14 +17,16 @@ def detect_faces(color, minNeighbors, scaleFactor):
             gray = gray.astype("uint8")
         
         faces = face_cascade.detectMultiScale(gray, scaleFactor=scaleFactor, minNeighbors=minNeighbors)
-        for (x, y, w, h) in faces:
-            r, g, b = ImageColor.getcolor(color, "RGB")  # Convert hex color to RGB
-            bgr_color = (b, g, r)  # Convert to BGR format
+        for idx, (x, y, w, h) in enumerate(faces):
+            r, g, b = ImageColor.getcolor(color, "RGB")
+            bgr_color = (b, g, r)
             cv2.rectangle(frame, (x, y), (x + w, y + h), bgr_color, 2)
+            
+            # Crop and save the detected face
+            face = frame[y:y+h, x:x+w]
+            cv2.imwrite(f"detected_face_{idx}.jpg", face)
+            
         cv2.imshow('Face Detection using Viola-Jones Algorithm', frame)
-        if cv2.waitKey(1) & 0xFF == ord('s'):
-            cv2.imwrite('save_image.jpg', frame)
-            break
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     cap.release()
