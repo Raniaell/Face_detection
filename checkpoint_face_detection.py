@@ -37,12 +37,21 @@ def app():
     st.write('This algorithm will allow you to detect faces from your webcam by drawing a rectangle !')
     st.write("Press the button below to start detecting faces from your webcam")
     rectangle_color=st.color_picker("Choose a color for your rectangle", "#FF0000")
-    rectangle_color = tuple(int(rectangle_color.lstrip("#")[i:i+2], 16) for i in (0, 2, 4))
+    st.write(rectangle_color)
+    st.write(isinstance(rectangle_color,str))
+    hex_color = rectangle_color
+    red = int(hex_color[1:3], 16)
+    green = int(hex_color[3:5], 16)
+    blue = int(hex_color[5:7], 16)
+
+    rgb_tuple = (red, green, blue)
+    st.write(rgb_tuple)
+
     min_neighbors=st.slider('choose a minNeighbor parameter:', 1, 10, 5 )
     scale_factor = st.slider('Choose scaleFactor parameter:', 1.01, 1.5, 1.1)
     # Add a button to start detecting faces
     if st.button("Detect Faces"):
-      detect_faces(rectangle_color, min_neighbors, scale_factor)
+      detect_faces(rgb_tuple, min_neighbors, scale_factor)
       
 
 if __name__ == "__main__":
